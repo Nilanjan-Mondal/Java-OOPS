@@ -6,8 +6,8 @@ public class ThreadTester {
 
         System.out.println("Starting main thread...");
 
-        Thread t1 = new Thread1(); // Here we are creating threads by extending the java.lang.Thread class...
-        t1.start(); // this tells jvm to call the run method (as we have created object of Thread1 so overridden run method will execute)
+        // Thread t1 = new Thread1(); // Here we are creating threads by extending the java.lang.Thread class...
+        // t1.start(); // this tells jvm to call the run method (as we have created object of Thread1 so overridden run method will execute)
 
 
         Thread t2 = new Thread(new Thread2(), "Thread2"); // Here we are creating threads by implementing the java.lang.Runnable interface
@@ -24,6 +24,45 @@ public class ThreadTester {
         // then it calls op.run() which refers to the run method of the Thread2 class that we implemented..
 
         t2.start();
+
+        // so now here the question is which method should be followed ?
+        // we know in java multiple inheritance is not possible... so we have a constraint that only single inheritance is possible in extending the Thread class
+        // But multiple implementation is possible in java... or we can implement multiple interfaces...
+        // Hence, we will follow the Runnable method... also every dev follows that.
+
+        // Another method of implementing the runnable interface is by using the lambda function.
+        // we need not implement a new class for this.... we will use lambda function.
+
+        // example :-
+        Thread t3 = new Thread( () -> {
+            for(int i=10; i<15; i++) {
+                System.out.println("Inside " + Thread.currentThread().getName() + "...");
+            }
+        }, "Thread 3");
+        t3.start();
+
+
+
+        Stack stack = new Stack(5);
+
+        new Thread( () -> {
+            int counter = 0;
+            while(++counter <= 5)
+                stack.push(100);
+        }, "Pusher Thread").start();
+
+        new Thread( () -> {
+            int counter = 0;
+            while(++counter <= 5)
+                System.out.println("Popped: " + stack.pop());
+        }, "Popper Thread").start();
+
+        // Here both Pusher and the popper thread are accessing the same Stack and running in parallel
+        // So what may happen is by time when the push is sleeping, popper has decreased the stackTop index or vice versa
+        // hence this creates a conflict (this is called the race condition) and gives index out of bound exception
+
+        // So to overcome this we need to make each method synchronized.
+        // Check Stack class...
 
         System.out.println("Ending main thread...");
     }
