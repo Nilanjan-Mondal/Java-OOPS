@@ -17,4 +17,12 @@ public class BoxWeight extends Box{
         super(l, h, w); // this will call the Box(l, h, w) constructor and set the values
         this.weight = weight;
     }
+
+    public BoxWeight(double weight) {
+        // suppose we do not have the default constructor (try commenting out the Box() constructor in the Box class) in the box class explicitly then super() does not gets called
+        // hence we get error (no parameterless constructor present in box class)
+        // now u can think that java provides default constructor but why is it not n this case...
+        // this is because Java only provides a default (no-argument) constructor if you don’t declare any constructor in your class... But we already have params constructor in the Box class.
+        this.weight = weight;
+    }
 }
